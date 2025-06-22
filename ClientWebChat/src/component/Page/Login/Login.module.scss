@@ -1,0 +1,77 @@
+.wrapper {
+  width: 350px;
+  height: 350px;
+  background-color: transparent;
+  border-radius: 8px;
+  border: 1px solid #6c74c8;
+  backdrop-filter: blur(3px);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  padding: 20px;
+  h1 {
+    font-weight: 600;
+    color: #b1c8e7;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  min-width: 245px;
+  justify-content: space-evenly;
+}
+
+.rowUserName,
+.rowPassWord {
+  width: 100%;
+  position: relative;
+}
+
+.username,
+.password {
+  height: 35px;
+  border-radius: 92px;
+  padding: 0 8px;
+  width: 100%;
+  padding-right: 40px;
+  color: #fff;
+  background-color: transparent;
+
+  ::placeholder {
+    font-size: 16px;
+    color: #fff;
+  }
+}
+
+.iconUserName,
+.iconPassWord {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+}
+
+.btn {
+  width: 245px;
+  height: 30px;
+  background-color: #81818b;
+  border-radius: 92px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

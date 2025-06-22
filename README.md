@@ -17,3 +17,13 @@ Cài các routes
 Cài pip install python-socketio
 Cài pip install flask-cors
 Cài pip install flask-socketio
+Cài thư viện để sử dụng icon:
+
+    npm install @fortawesome/react-fontawesome
+    npm install @fortawesome/free-solid-svg-icons
+    npm install @fortawesome/free-regular-svg-icons
+    npm install @fortawesome/free-brands-svg-icons
+
+Cài đặt các cơ bản về backend
+
+## Dự tính 21/6/2025: Làm được form login frontend

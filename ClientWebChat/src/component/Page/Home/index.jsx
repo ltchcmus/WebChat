@@ -1,5 +1,12 @@
+import clsx from "clsx";
+import styles from "./Home.module.scss";
+//cần 3 div thì phải
 function Home() {
-  return <h1>hello</h1>;
+  return (
+    <div className={clsx(styles.wrapper)}>
+      <h1>Hello Home</h1>
+    </div>
+  );
 }
 
 export default Home;
