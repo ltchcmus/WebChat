@@ -1,27 +1,31 @@
 import clsx from "clsx";
-import styles from "./Login.module.scss";
+import styles from "./Signup.module.scss";
 import Button from "../../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-//cần 3 div thì phải
-function Login() {
+import { useNavigate } from "react-router-dom";
+
+function Signup() {
   const username = useRef(null);
   const password = useRef(null);
+  const email = useRef(null);
   const navigate = useNavigate();
   function handleEnter(e) {
     if (e.key === "Enter") {
-      console.log(username.current.value, password.current.value);
+      console.log(
+        username.current.value,
+        password.current.value,
+        email.current.value
+      );
       //thực hiện fetch để check tài khoản
-      navigate("/home"); //giúp chuyển trang
     }
   }
   return (
     <div className={clsx(styles.wrapper)} onKeyDown={handleEnter}>
       <div className={clsx(styles.container)}>
         <header className={clsx(styles.header)}>
-          <h1>Login</h1>
+          <h1>Sign up</h1>
         </header>
 
         <div className={clsx(styles.content)}>
@@ -35,6 +39,19 @@ function Login() {
             <FontAwesomeIcon
               icon={faUser}
               className={clsx(styles.iconUserName)}
+            />
+          </div>
+
+          <div className={clsx(styles.rowEmail)}>
+            <input
+              type="email"
+              ref={email}
+              placeholder="Email"
+              className={clsx(styles.email)}
+            />
+            <FontAwesomeIcon
+              icon={faEnvelope}
+              className={clsx(styles.iconEmail)}
             />
           </div>
 
@@ -52,19 +69,12 @@ function Login() {
           </div>
         </div>
 
-        <Button to="/home">
-          <h4 className={clsx(styles.btn)}>Login</h4>
+        <Button>
+          <h4 className={clsx(styles.btn)}>Sign up</h4>
         </Button>
-
-        <div className={clsx(styles.textLine)}>
-          <span className={clsx(styles.text)}>not a member ?</span>
-          <Link to="/signup" className={clsx(styles.textSignup)}>
-            Sign up now
-          </Link>
-        </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Signup;

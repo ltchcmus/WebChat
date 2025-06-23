@@ -6,6 +6,7 @@ import Background from "./component/Background";
 import Home from "./component/Page/Home";
 import Login from "./component/Page/Login";
 import Chat from "./component/Page/Chat";
+import Signup from "./component/Page/Signup";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </div>
       </div>
