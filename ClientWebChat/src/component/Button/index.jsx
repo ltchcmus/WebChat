@@ -4,9 +4,10 @@ import styles from "./Button.module.scss";
 function Button({ href, to, children, onClick, className: cls, ...props }) {
   let Comp = "button";
   const attribute = {
-    onClick,
     ...props,
   };
+
+  if (onClick) attribute.onClick = onClick;
 
   if (href) {
     Comp = "a";

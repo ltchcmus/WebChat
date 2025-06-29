@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 //cần 3 div thì phải
 function Login() {
   const username = useRef(null);
@@ -17,6 +18,7 @@ function Login() {
       navigate("/home"); //giúp chuyển trang
     }
   }
+
   return (
     <div className={clsx(styles.wrapper)} onKeyDown={handleEnter}>
       <div className={clsx(styles.container)}>

@@ -5,21 +5,63 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import validator from "validator";
+import { toast } from "react-toastify";
 
 function Signup() {
   const username = useRef(null);
   const password = useRef(null);
   const email = useRef(null);
   const navigate = useNavigate();
+
+  function isValidUsername(username) {
+    const regex = /^[a-zA-Z0-9]{8,12}$/;
+    return regex.test(username);
+  }
+
+  function isValidPassword(pasword) {
+    return /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,20}$/.test(
+      password
+    );
+  }
+
+  function isEmail(email) {
+    return validator.isEmail(email);
+  }
+
+  function createAccount() {
+    let ok = true;
+    const user = username.current.value.trim();
+    if (!isValidUsername(user)) {
+      toast.error("Username phải từ 8-12 kí tự không chứ các kí tự đặc biệt");
+      ok = false;
+    }
+    const pass = password.current.value.trim();
+    if (!isValidPassword(pass)) {
+      toast.error(
+        "Password phải từ 8-20 kí tự và có thể chứa các kí tự đặc biệt"
+      );
+      ok = false;
+    }
+    const e = email.current.value.trim();
+    if (!isEmail(e)) {
+      toast.error("Email không hợp lệ");
+      ok = false;
+    }
+
+    if (!ok) return;
+  }
+
   function handleEnter(e) {
     if (e.key === "Enter") {
-      console.log(
-        username.current.value,
-        password.current.value,
-        email.current.value
-      );
+      createAccount();
       //thực hiện fetch để check tài khoản
     }
+  }
+
+  function handleSignup(e) {
+    createAccount();
   }
   return (
     <div className={clsx(styles.wrapper)} onKeyDown={handleEnter}>
@@ -69,7 +111,7 @@ function Signup() {
           </div>
         </div>
 
-        <Button>
+        <Button onClick={handleSignup}>
           <h4 className={clsx(styles.btn)}>Sign up</h4>
         </Button>
       </div>

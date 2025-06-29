@@ -1,6 +1,10 @@
 from library import create_app
+from flask import jsonify
+app = create_app()
+
+@app.route("/")
+def welcome():
+    return "Trang Backend created by Lê Thành Công"
 
 if __name__ == '__main__':
-
-    app = create_app()
     app.run(debug=True)

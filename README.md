@@ -24,6 +24,10 @@ Cài thư viện để sử dụng icon:
     npm install @fortawesome/free-regular-svg-icons
     npm install @fortawesome/free-brands-svg-icons
 
+Cài pip install flask_sqlalchemy
+Cài npm i validator
+Cài npm install --save react-toastify
+
 Cài đặt các cơ bản về backend
 
 ## Dự tính 21/6/2025: Làm được form login frontend

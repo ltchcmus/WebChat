@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import clsx from "clsx";
 import styles from "./App.module.scss";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Background from "./component/Background";
 import Home from "./component/Page/Home";
@@ -21,6 +23,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
           </Routes>
         </div>
+        <ToastContainer autoClose={2000} />
       </div>
     </Router>
   );
