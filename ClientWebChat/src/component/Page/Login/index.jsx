@@ -5,18 +5,59 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../../UserProvider";
 import { toast } from "react-toastify";
 //cần 3 div thì phải
 function Login() {
   const username = useRef(null);
   const password = useRef(null);
   const navigate = useNavigate();
+  const { userCurrent, setUserCurrent } = useUser();
+  function handleLogin() {
+    fetch("http://127.0.0.1:5000/api/users/login-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username.current.value.trim(),
+        password: password.current.value.trim(),
+      }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status == 500) {
+          toast.error(data.error);
+          return;
+        } else if (res.status === 200) {
+          toast.success("Đăng nhập thành công");
+          setUserCurrent({
+            user: username.current.value.trim(),
+            pass: password.current.value.trim(),
+          });
+          if (data.isvalid) {
+            setTimeout(() => {
+              navigate("/home");
+            }, 500);
+          } else {
+            setTimeout(() => {
+              navigate("/confirm");
+              toast.warn("Tài khoản chưa xác thực, vui lòng xác thực");
+            }, 500);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   function handleEnter(e) {
     if (e.key === "Enter") {
-      console.log(username.current.value, password.current.value);
-      //thực hiện fetch để check tài khoản
-      navigate("/home"); //giúp chuyển trang
+      handleLogin();
     }
+  }
+
+  function handleClickLogin() {
+    handleLogin();
   }
 
   return (
@@ -54,7 +95,7 @@ function Login() {
           </div>
         </div>
 
-        <Button to="/home">
+        <Button onClick={handleClickLogin}>
           <h4 className={clsx(styles.btn)}>Login</h4>
         </Button>
 

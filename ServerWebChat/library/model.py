@@ -6,6 +6,8 @@ class Users(db.Model):
     password = db.Column(db.String(128), nullable = False)
     email = db.Column(db.String(128), nullable = False)
     create_at = db.Column(db.DateTime, default = datetime.now(timezone.utc))
+    isvalid = db.Column(db.Boolean, default = False)
+    code = db.Column(db.Integer, nullable = False)
     def __init__(self, username, password, email):
         self.username = username
         self.password = password

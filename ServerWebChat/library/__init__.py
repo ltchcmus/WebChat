@@ -1,5 +1,5 @@
-from flask import Flask, request, Blueprint
-from .extensions import db
+from flask import Flask
+from .extensions import db, mail
 import os
 from .Users.controller import users
 from .Message.controller import message
@@ -22,6 +22,7 @@ def create_app(config_file = "config.py"):
     app.config.from_pyfile(config_file)
 
     db.init_app(app)
+    mail.init_app(app)
     create_database(app)
     app.register_blueprint(users)
     app.register_blueprint(message)

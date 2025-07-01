@@ -9,7 +9,7 @@ import Home from "./component/Page/Home";
 import Login from "./component/Page/Login";
 import Chat from "./component/Page/Chat";
 import Signup from "./component/Page/Signup";
-
+import Confirm from "./component/Page/Confirm";
 function App() {
   return (
     <Router>
@@ -21,6 +21,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/confirm" element={<Confirm />} />
           </Routes>
         </div>
         <ToastContainer autoClose={2000} />

@@ -7,12 +7,14 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import validator from "validator";
+import { useUser } from "../../UserProvider";
 import { toast } from "react-toastify";
 
 function Signup() {
   const username = useRef(null);
   const password = useRef(null);
   const email = useRef(null);
+  const { userCurrent, setUserCurrent } = useUser();
   const navigate = useNavigate();
 
   function isValidUsername(username) {
@@ -20,10 +22,8 @@ function Signup() {
     return regex.test(username);
   }
 
-  function isValidPassword(pasword) {
-    return /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,20}$/.test(
-      password
-    );
+  function isValidPassword(password) {
+    return /^.{8,20}$/.test(password);
   }
 
   function isEmail(email) {
@@ -38,6 +38,7 @@ function Signup() {
       ok = false;
     }
     const pass = password.current.value.trim();
+
     if (!isValidPassword(pass)) {
       toast.error(
         "Password phải từ 8-20 kí tự và có thể chứa các kí tự đặc biệt"
@@ -51,6 +52,33 @@ function Signup() {
     }
 
     if (!ok) return;
+
+    fetch("http://127.0.0.1:5000/api/users/create-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user,
+        email: e,
+        password: pass,
+      }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status === 200) {
+          setUserCurrent({
+            user: user,
+            pass: pass,
+          });
+
+          navigate("/confirm");
+        } else if (res.status === 500) {
+          toast.error(data.error);
+          return;
+        }
+      })
+      .catch((err) => console.error(err));
   }
 
   function handleEnter(e) {
