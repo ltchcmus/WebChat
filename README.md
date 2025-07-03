@@ -27,6 +27,7 @@ Cài thư viện để sử dụng icon:
 Cài pip install flask_sqlalchemy
 Cài npm i validator
 Cài npm install --save react-toastify
+Cài npm install socket.io-client
 
 Cài đặt các cơ bản về backend
 
