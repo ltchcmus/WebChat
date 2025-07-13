@@ -74,3 +74,27 @@ def service_login_user(data):
             return {"error" : "Wrong username or password"}, 500
     except:
         return {"error" : "Fail"}, 500
+    
+def service_search_user(name):
+    try:
+        users = Users.query.filter(Users.username.like(f"%{name}%")).all()
+        ans = []
+        for user in users:
+            ans.append(user.username)
+        print(ans)
+        return {"message": "success", "data" : ans}, 200
+    except:
+        return {"error" : "Fail"}, 500
+    
+def service_get_all_user():
+    try:
+        users = Users.query.all()
+        
+        ans = []
+        for user in users:
+            ans.append(user.username)
+
+        return {"message" : "success", "data" : ans} , 200
+
+    except:
+        return {"error" : "Fail"}, 500

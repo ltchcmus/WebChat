@@ -10,10 +10,14 @@ import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUser } from "../../UserProvider";
+import { useListUser } from "../../ListUserProvider";
+
 function Confirm() {
   const navigate = useNavigate();
   const code = useRef(null);
   const { userCurrent, setUserCurrent } = useUser();
+  const { listUser, setListUser } = useListUser();
+
   function handleClickSendAgain() {
     fetch("http://127.0.0.1:5000/api/users/confirm-user-send-again", {
       method: "POST",
@@ -48,6 +52,15 @@ function Confirm() {
         const data = await res.json();
         if (res.status === 200) {
           toast.success("Xác thực tài khoản thành công");
+          fetch("http://127.0.0.1:5000/api/users/get-all").then(async (res) => {
+            const data = await res.json();
+            if (res.status === 500) {
+              toast.error("Lỗi nhận data");
+              return;
+            } else if (res.status === 200) {
+              setListUser(data.data);
+            }
+          });
           setTimeout(() => {
             navigate("/home");
           }, 1000);

@@ -19,3 +19,12 @@ def confirm_user_send_again():
 @users.route("/api/users/login-user", methods = ["POST"])
 def login_user():
     return service_login_user(request.get_json())
+
+@users.route("/api/users/search-user/q=<name>")
+def search_user(name):
+    print(name)
+    return service_search_user(name)
+
+@users.route("/api/users/get-all")
+def get_all_user():
+    return service_get_all_user()

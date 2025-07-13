@@ -20,6 +20,7 @@
 .listUser {
   width: 400px;
   border: 1px solid #6c74c8;
+  position: relative;
 }
 
 .frameChat {
@@ -35,6 +36,19 @@
   position: absolute;
   right: 10px;
   top: 0px;
+}
+
+.avatar:hover ~ .settings {
+  display: flex;
+}
+
+.settings::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 10px;
+  width: 50px;
+  height: 20px;
 }
 
 .logo {
@@ -66,17 +80,11 @@
   line-height: 10px;
   height: 25px;
   font-size: 10px;
-  border: 2px solid #6c74c8;
   border-radius: 92px;
 }
 
-.avatar:hover ~ .settings {
+.settings:hover {
   display: flex;
-}
-
-.settings:first-child {
-  width: 20px;
-  height: 20px;
 }
 
 .search {
@@ -88,4 +96,30 @@
   border-radius: 92px;
   padding: 0px 10px;
   margin-top: 10px;
+}
+
+.listSearch {
+  width: 250px;
+  background-color: #24246a;
+  position: absolute;
+  left: 42px;
+  border-radius: 8px;
+  box-shadow: #333;
+  overflow: auto;
+  z-index: 3;
+}
+
+.user {
+  position: absolute;
+  top: 70px;
+  left: 60px;
+  width: 300px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

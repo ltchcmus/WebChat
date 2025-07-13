@@ -9,14 +9,12 @@ import { useEffect } from "react";
 import validator from "validator";
 import { useUser } from "../../UserProvider";
 import { toast } from "react-toastify";
-
 function Signup() {
   const username = useRef(null);
   const password = useRef(null);
   const email = useRef(null);
   const { userCurrent, setUserCurrent } = useUser();
   const navigate = useNavigate();
-
   function isValidUsername(username) {
     const regex = /^[a-zA-Z0-9]{8,12}$/;
     return regex.test(username);

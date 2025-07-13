@@ -5,6 +5,10 @@ import Logo from "../../Logo";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../UserProvider";
+import useDebounce from "../../UseDebounce";
+import { toast } from "react-toastify";
+import User from "../../User";
+import { useListUser } from "../../ListUserProvider";
 
 function Home() {
   const navigate = useNavigate();
@@ -12,6 +16,25 @@ function Home() {
   const { userCurrent, setUserCurrent } = useUser();
   const [avatar, setAvatar] = useState("\\src\\assets\\noimage.png");
   const prevAvatar = useRef(null);
+  const [searchText, setSearchText] = useState("");
+  const valueInputSearch = useDebounce(searchText);
+  const [listUsersSearch, setListUsersSearch] = useState([]);
+  const refSearchText = useRef(null);
+  const { listUser, setListUser } = useListUser();
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/api/users/get-all").then(async (res) => {
+      const data = await res.json();
+      if (res.status === 500) {
+        toast.error("Lỗi nhận data");
+        return;
+      } else if (res.status === 200) {
+        setListUser(data.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {}, [listUser]);
 
   function handleClickLogo() {
     window.location.href = "/home";
@@ -34,6 +57,31 @@ function Home() {
     }
   }
 
+  function handleChangeInput(e) {
+    const inp = e.target.value.trim();
+    setSearchText(inp);
+  }
+
+  useEffect(() => {
+    const val = valueInputSearch.trim();
+    if (val) {
+      fetch(
+        `http://127.0.0.1:5000/api/users/search-user/q=${encodeURIComponent(
+          val
+        )}`
+      )
+        .then(async (res) => {
+          const data = await res.json();
+          if (res.status === 500) {
+            toast.error("Error khi nhan du lieu");
+          } else if (res.status === 200) {
+            setListUsersSearch(data.data);
+          }
+        })
+        .catch((err) => toast.error(err));
+    }
+  }, [valueInputSearch]);
+
   useEffect(() => {
     return () => {
       if (prevAvatar.current) URL.revokeObjectURL(prevAvatar.current);
@@ -50,8 +98,6 @@ function Home() {
       click: handleLogout,
     },
   ];
-
-  const listUser = [];
 
   return (
     <div className={clsx(styles.wrapper)}>
@@ -84,11 +130,32 @@ function Home() {
             <label htmlFor="listUser-search"> Tìm kiếm </label>
             <input
               id="listUser-search"
+              ref={refSearchText}
               type="search"
               className={clsx(styles.search)}
+              onChange={handleChangeInput}
             />
+
+            {listUsersSearch.length > 0 &&
+            valueInputSearch.length > 0 &&
+            document.activeElement == refSearchText.current ? (
+              <div
+                className={clsx(styles.listSearch)}
+                style={{ height: listUsersSearch.length * 25 }}
+              >
+                {listUsersSearch.map((user, index) => {
+                  return <User key={index}>{user}</User>;
+                })}
+              </div>
+            ) : (
+              ""
+            )}
           </header>
-          <div className={clsx(styles.user)}></div>
+          <div className={clsx(styles.user)}>
+            {listUser.map((user, index) => {
+              return <User key={index}>{user}</User>;
+            })}
+          </div>
         </div>
 
         <div className={clsx(styles.frameChat)}>
