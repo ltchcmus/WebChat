@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import styles from "./Button.module.scss";
-function Button({ href, to, children, onClick, ...props }) {
+function Button({ href, to, children, onClick, className, ...props }) {
   let Comp = "button";
   const attribute = {
     ...props,
@@ -20,11 +20,9 @@ function Button({ href, to, children, onClick, ...props }) {
   }
 
   return (
-    <div className={clsx(styles.wrapper)}>
-      <Comp {...attribute} className={clsx(styles.btn)}>
-        {children}
-      </Comp>
-    </div>
+    <Comp className={clsx(styles.btn, className)} {...attribute}>
+      {children}
+    </Comp>
   );
 }
 

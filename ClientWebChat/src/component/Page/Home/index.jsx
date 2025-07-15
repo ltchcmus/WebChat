@@ -9,6 +9,7 @@ import useDebounce from "../../UseDebounce";
 import { toast } from "react-toastify";
 import User from "../../User";
 import { useListUser } from "../../ListUserProvider";
+import { io } from "socket.io-client";
 
 function Home() {
   const navigate = useNavigate();
@@ -21,20 +22,75 @@ function Home() {
   const [listUsersSearch, setListUsersSearch] = useState([]);
   const refSearchText = useRef(null);
   const { listUser, setListUser } = useListUser();
+  const socket = useRef(null);
+
+  console.log(userCurrent.user);
+
+  useEffect(() => {
+    console.log("🔌 Attempting to connect to Socket.IO");
+
+    if (!userCurrent.user) {
+      console.log("❌ No user token");
+      return;
+    }
+
+    // Tránh tạo connection mới nếu đã có
+    if (socket.current?.connected) {
+      console.log("✅ Socket already connected");
+      return;
+    }
+
+    socket.current = io("http://127.0.0.1:5000", {
+      transports: ["websocket", "polling"],
+      auth: {
+        token: userCurrent.user,
+      },
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionAttempts: 5,
+    });
+
+    socket.current.on("connect", () => {
+      console.log("✅ Connected to Socket.IO server");
+      console.log("🔑 Socket ID:", socket.current.id);
+    });
+
+    socket.current.on("connect_response", (data) => {
+      console.log("📨 Server response:", data);
+    });
+
+    socket.current.on("connect_error", (error) => {
+      console.error("❌ Connection error:", error);
+      console.log("🔄 Trying to reconnect...");
+    });
+
+    socket.current.on("disconnect", (reason) => {
+      console.log("🔌 Disconnected:", reason);
+    });
+
+    return () => {
+      if (socket.current) {
+        console.log("🧹 Cleaning up socket connection");
+        socket.current.removeAllListeners();
+        socket.current.disconnect();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/users/get-all").then(async (res) => {
       const data = await res.json();
       if (res.status === 500) {
-        toast.error("Lỗi nhận data");
-        return;
+        toast.error("Nhận dữ liệu lỗi");
       } else if (res.status === 200) {
-        setListUser(data.data);
+        setListUser(
+          data.data.filter((value) => {
+            return value != userCurrent.user;
+          })
+        );
       }
     });
   }, []);
-
-  useEffect(() => {}, [listUser]);
 
   function handleClickLogo() {
     window.location.href = "/home";
@@ -44,6 +100,7 @@ function Home() {
   }
   function handleLogout() {
     setUserCurrent({ user: "", pass: "" });
+    localStorage.removeItem("userCurrent");
     window.location.href = "/";
   }
 
@@ -81,12 +138,6 @@ function Home() {
         .catch((err) => toast.error(err));
     }
   }, [valueInputSearch]);
-
-  useEffect(() => {
-    return () => {
-      if (prevAvatar.current) URL.revokeObjectURL(prevAvatar.current);
-    };
-  }, []);
 
   const listButton = [
     {

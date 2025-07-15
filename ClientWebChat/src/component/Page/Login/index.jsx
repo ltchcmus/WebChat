@@ -35,6 +35,15 @@ function Login() {
             user: username.current.value.trim(),
             pass: password.current.value.trim(),
           });
+
+          localStorage.setItem(
+            "userCurrent",
+            JSON.stringify({
+              user: username.current.value.trim(),
+              pass: password.current.value.trim(),
+            })
+          );
+
           if (data.isvalid) {
             setTimeout(() => {
               navigate("/home");
@@ -95,8 +104,11 @@ function Login() {
           </div>
         </div>
 
-        <Button onClick={handleClickLogin}>
-          <h4 className={clsx(styles.btn)}>Login</h4>
+        <Button
+          onClick={handleClickLogin}
+          className={clsx(styles.updateClassName)}
+        >
+          Login
         </Button>
 
         <div className={clsx(styles.textLine)}>

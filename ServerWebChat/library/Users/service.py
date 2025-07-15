@@ -1,6 +1,6 @@
 from flask import  jsonify, request
 from library.model import Users, Message
-from library.extensions import db, mail
+from library.extensions import db, mail, userConnects
 import random
 from flask_mail import Message
 
@@ -88,13 +88,7 @@ def service_search_user(name):
     
 def service_get_all_user():
     try:
-        users = Users.query.all()
-        
-        ans = []
-        for user in users:
-            ans.append(user.username)
-
-        return {"message" : "success", "data" : ans} , 200
+        return {"message" : "success", "data" : list(userConnects)} , 200
 
     except:
         return {"error" : "Fail"}, 500

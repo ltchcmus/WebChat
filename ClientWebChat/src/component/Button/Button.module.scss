@@ -1,5 +1,8 @@
 .wrapper {
   // Base styling
+}
+
+.btn {
   display: flex;
   align-items: center;
   padding: 4px 8px;
@@ -9,7 +12,7 @@
   width: auto;
   min-width: 75px;
   max-width: 300px;
-
+  justify-content: center;
   // Typography
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
@@ -77,9 +80,7 @@
 
   // Text selection
   user-select: none;
-}
 
-.btn {
   color: var(--buttonColor);
   font-size: 1.4rem;
   background-color: transparent;

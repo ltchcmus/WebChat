@@ -137,8 +137,8 @@ function Signup() {
           </div>
         </div>
 
-        <Button onClick={handleSignup}>
-          <h4 className={clsx(styles.btn)}>Sign up</h4>
+        <Button onClick={handleSignup} className={styles.addClassName}>
+          Sign up
         </Button>
       </div>
     </div>

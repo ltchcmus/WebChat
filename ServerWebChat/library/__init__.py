@@ -1,5 +1,4 @@
-from flask import Flask
-from .extensions import db, mail
+from .extensions import db, mail, app, socketio
 import os
 from .Users.controller import users
 from .Message.controller import message
@@ -16,14 +15,14 @@ def create_database(app):
   
 
     
-def create_app(config_file = "config.py"):
-    app = Flask(__name__)
+def init(config_file = "config.py"):
     CORS(app)
     app.config.from_pyfile(config_file)
 
     db.init_app(app)
     mail.init_app(app)
+    socketio.init_app(app, cors_allowed_origins='*')
+    from library.Websocket import controller
     create_database(app)
     app.register_blueprint(users)
     app.register_blueprint(message)
-    return app

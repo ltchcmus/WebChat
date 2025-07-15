@@ -51,7 +51,6 @@ function Confirm() {
       .then(async (res) => {
         const data = await res.json();
         if (res.status === 200) {
-          toast.success("Xác thực tài khoản thành công");
           fetch("http://127.0.0.1:5000/api/users/get-all").then(async (res) => {
             const data = await res.json();
             if (res.status === 500) {
@@ -62,7 +61,10 @@ function Confirm() {
             }
           });
           setTimeout(() => {
-            navigate("/home");
+            toast.success(
+              "Xác thực tài khoản thành công, vui lòng đăng nhập lại"
+            );
+            navigate("/"); //không reload
           }, 1000);
         } else if (res.status === 500) {
           toast.error(data.error);
@@ -97,8 +99,8 @@ function Confirm() {
           </div>
         </div>
 
-        <Button onClick={handleOk}>
-          <h4 className={clsx(styles.btn)}>OK!</h4>
+        <Button onClick={handleOk} className={styles.addClassName}>
+          OK!
         </Button>
       </div>
     </div>
