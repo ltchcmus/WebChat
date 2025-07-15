@@ -23,11 +23,6 @@
   position: relative;
 }
 
-.frameChat {
-  flex: 1;
-  border: 1px solid #6c74c8;
-}
-
 .avatar {
   width: 50px;
   height: 50px;
@@ -121,6 +116,111 @@
   flex-direction: column;
   justify-content: space-evenly;
 
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.frameChat {
+  flex: 1;
+  border: 1px solid #6c74c8;
+}
+
+.frame {
+  height: 100%;
+  width: 100%;
+  border: 5px solid #02021f;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerFrameChat {
+  height: 75px;
+  width: 100%;
+  border-bottom: 5px solid #02021f;
+  display: flex;
+  align-items: center;
+}
+
+.avatarFrameChat {
+  height: 70px;
+  width: 70px;
+  border-radius: 92px;
+  object-fit: cover;
+  margin-right: 20px;
+  margin-left: 10px;
+}
+.optionHeaderFrameChat {
+  transform: translateY(-50%);
+  margin-right: 5px;
+  user-select: none;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.UserName2 {
+  flex: 1;
+}
+
+.bodyFrameChat {
+  height: 570px;
+  width: 100%;
+  padding: 5px;
+  overflow: auto;
+}
+
+.frameInputChat {
+  flex: 1;
+  border: 2px solid #02021f;
+  border-radius: 8px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.Image {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  margin-right: 20px;
+  position: relative;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.slipt {
+  height: 100%;
+  width: 1px;
+  background-color: #485767;
+}
+
+.FrameContentChat {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.contentChat {
+  height: 100%;
+  width: 100%;
+  padding-right: 50px;
+  margin: 0px 5px;
+  height: calc(100% - 5px);
+  border: 1px solid #04162f;
+  border-radius: 92px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  background-color: transparent;
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+.iconSend {
+  margin-right: 5px;
+  height: 20px;
   &:hover {
     cursor: pointer;
   }

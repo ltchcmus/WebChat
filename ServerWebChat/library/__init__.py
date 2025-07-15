@@ -2,6 +2,7 @@ from .extensions import db, mail, app, socketio
 import os
 from .Users.controller import users
 from .Message.controller import message
+from .Avatar.controller import avatar
 from flask_cors import CORS
 
 
@@ -26,3 +27,4 @@ def init(config_file = "config.py"):
     create_database(app)
     app.register_blueprint(users)
     app.register_blueprint(message)
+    app.register_blueprint(avatar)

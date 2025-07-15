@@ -10,18 +10,20 @@ import { toast } from "react-toastify";
 import User from "../../User";
 import { useListUser } from "../../ListUserProvider";
 import { io } from "socket.io-client";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 function Home() {
   const navigate = useNavigate();
   const input = useRef(null);
   const { userCurrent, setUserCurrent } = useUser();
-  const [avatar, setAvatar] = useState("\\src\\assets\\noimage.png");
+  const [avatar, setAvatar] = useState(null);
   const prevAvatar = useRef(null);
   const [searchText, setSearchText] = useState("");
   const valueInputSearch = useDebounce(searchText);
   const [listUsersSearch, setListUsersSearch] = useState([]);
   const refSearchText = useRef(null);
   const { listUser, setListUser } = useListUser();
+  const [onFrameChat, setonFrameChat] = useState(true);
   const socket = useRef(null);
 
   console.log(userCurrent.user);
@@ -105,8 +107,27 @@ function Home() {
   }
 
   function handleHidden(e) {
-    const file = e.target.files[0];
+    const file = e.target.files[0]; // ảnh thật (binary)
     if (file) {
+      try {
+        const formData = new FormData();
+        formData.append("avatar", file);
+        formData.append("username", userCurrent.user);
+        fetch("http://127.0.0.1:5000/api/avatar/update", {
+          method: "POST",
+          body: formData,
+        }).then(async (res) => {
+          const data = await res.json();
+          if (res.status === 500) {
+            console.log(data.message);
+          } else if (res.status === 400) {
+            console.log(data.error);
+          } else if (res.status === 200) {
+          }
+        });
+      } catch (err) {
+        console.log("Lưu ảnh thất bại");
+      }
       if (prevAvatar.current) URL.revokeObjectURL(prevAvatar.current);
       const url = URL.createObjectURL(file);
       prevAvatar.current = url;
@@ -155,7 +176,16 @@ function Home() {
       <header className={clsx(styles.header)}>
         <Logo className={clsx(styles.logo)} onClick={handleClickLogo} />
         <div className={clsx(styles.avatarFrame)}>
-          <img src={avatar} alt="avatar" className={clsx(styles.avatar)} />
+          <img
+            src={
+              avatar ||
+              `http://127.0.0.1:5000/api/avatar/get/q=${encodeURIComponent(
+                userCurrent.user
+              )}`
+            }
+            alt="avatar"
+            className={clsx(styles.avatar)}
+          />
 
           <div className={clsx(styles.settings)}>
             <input
@@ -188,31 +218,74 @@ function Home() {
             />
 
             {listUsersSearch.length > 0 &&
-            valueInputSearch.length > 0 &&
-            document.activeElement == refSearchText.current ? (
-              <div
-                className={clsx(styles.listSearch)}
-                style={{ height: listUsersSearch.length * 25 }}
-              >
-                {listUsersSearch.map((user, index) => {
-                  return <User key={index}>{user}</User>;
-                })}
-              </div>
-            ) : (
-              ""
-            )}
+              valueInputSearch.length > 0 &&
+              document.activeElement == refSearchText.current && (
+                <div
+                  className={clsx(styles.listSearch)}
+                  style={{ height: listUsersSearch.length * 25 }}
+                >
+                  {listUsersSearch.map((user, index) => {
+                    return (
+                      <User key={index} avatar username={user}>
+                        {user}
+                      </User>
+                    );
+                  })}
+                </div>
+              )}
           </header>
           <div className={clsx(styles.user)}>
             {listUser.map((user, index) => {
-              return <User key={index}>{user}</User>;
+              return (
+                <User key={index} avatar username={user}>
+                  {user}
+                </User>
+              );
             })}
           </div>
         </div>
 
-        <div className={clsx(styles.frameChat)}>
-          <header className={clsx(styles.headerFrameChat)}></header>
-          <div className={styles.frame}></div>
-        </div>
+        {
+          <div className={clsx(styles.frameChat)}>
+            {onFrameChat && (
+              <div className={clsx(styles.frame)}>
+                <header className={clsx(styles.headerFrameChat)}>
+                  <img
+                    src={`http://127.0.0.1:5000/api/avatar/get/q=${encodeURIComponent(
+                      "cong1234"
+                    )}`}
+                    className={clsx(styles.avatarFrameChat)}
+                    alt="avatar"
+                  />
+                  <h1 className={clsx(styles.UserName2)}>ltc11111</h1>
+                  <h1 className={clsx(styles.optionHeaderFrameChat)}>...</h1>
+                </header>
+
+                <div className={clsx(styles.bodyFrameChat)}>nội dung chat</div>
+
+                <div className={clsx(styles.frameInputChat)}>
+                  <FontAwesomeIcon
+                    icon={faImage}
+                    className={clsx(styles.Image)}
+                  />
+                  <div className={clsx(styles.slipt)}></div>
+
+                  <div className={clsx(styles.FrameContentChat)}>
+                    <input
+                      type="text"
+                      className={clsx(styles.contentChat)}
+                      placeholder="content"
+                    />
+                    <FontAwesomeIcon
+                      icon={faPaperPlane}
+                      className={clsx(styles.iconSend)}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        }
       </div>
     </div>
   );

@@ -17,6 +17,8 @@ Cài các routes
 Cài pip install python-socketio
 Cài pip install flask-cors
 Cài pip install flask-socketio
+Cài pip install eventlet (để không gặp lỗi AssertionError: write() before start_response)
+
 Cài thư viện để sử dụng icon:
 
     npm install @fortawesome/react-fontawesome

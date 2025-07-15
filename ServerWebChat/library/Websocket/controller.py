@@ -1,6 +1,6 @@
 from library.extensions import socketio, lock, userConnects, fIdToUserName
 from flask_socketio import emit, disconnect
-from flask import request
+from flask import request, jsonify  # ✅ thêm import jsonify
 
 @socketio.on('connect')
 def handle_connect(auth):
@@ -15,14 +15,13 @@ def handle_connect(auth):
             if not token:
                 print("❌ No token provided, disconnecting")
                 disconnect()
-                return False
+                return {'status': 'error', 'message': 'No token provided'}  # ✅ thêm jsonify ở đây
                 
             userConnects.add(token)
             fIdToUserName[request.sid] = token
             print(f"✅ User {token} connected with session ID: {request.sid}")
             print(f"👥 Total connected users: {len(userConnects)}")
             
-            # Gửi confirmation message
             emit('connect_response', {
                 'status': 'success', 
                 'message': 'Connected successfully',
@@ -32,7 +31,7 @@ def handle_connect(auth):
     except Exception as e:
         print(f"❌ Error during connection: {e}")
         disconnect()
-        return False
+        return {'status': 'error', 'message': 'Internal server error'}  # ✅ thêm jsonify ở đây
 
 @socketio.on('disconnect')
 def handle_disconnect(reason):
@@ -51,4 +50,3 @@ def handle_disconnect(reason):
 @socketio.on_error_default
 def default_error_handler(e):
     print(f"❌ SocketIO error: {e}")
-

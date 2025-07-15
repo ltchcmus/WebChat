@@ -8,11 +8,11 @@ export const UserProvider = ({ children }) => {
   try {
     const stored = localStorage.getItem("userCurrent");
     if (stored) {
-      initialUser = JSON.parse(stored); // ✅ parse chuỗi hợp lệ
+      initialUser = JSON.parse(stored);
     }
   } catch (e) {
     console.error("Lỗi khi parse localStorage:", e);
-    localStorage.removeItem("userCurrent"); // dọn lỗi nếu dữ liệu sai
+    localStorage.removeItem("userCurrent");
   }
 
   const [userCurrent, setUserCurrent] = useState(initialUser);

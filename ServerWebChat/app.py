@@ -8,6 +8,8 @@ def welcome():
     return "Trang Backend created by Lê Thành Công"
 
 if __name__ == '__main__':
+    import eventlet
+    import eventlet.wsgi
     init()
     socketio.run(app, 
                 host='127.0.0.1', 
