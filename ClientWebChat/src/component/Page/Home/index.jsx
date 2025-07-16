@@ -11,7 +11,13 @@ import User from "../../User";
 import { useListUser } from "../../ListUserProvider";
 import { io } from "socket.io-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import {
+  faImage,
+  faPaperPlane,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import Message from "../../Message";
+
 function Home() {
   const navigate = useNavigate();
   const input = useRef(null);
@@ -23,10 +29,10 @@ function Home() {
   const [listUsersSearch, setListUsersSearch] = useState([]);
   const refSearchText = useRef(null);
   const { listUser, setListUser } = useListUser();
-  const [onFrameChat, setonFrameChat] = useState(true);
+  const [onFrameChat, setonFrameChat] = useState(false);
+  const user2 = useRef(null);
   const socket = useRef(null);
-
-  console.log(userCurrent.user);
+  const listMessageChat = useRef([]);
 
   useEffect(() => {
     console.log("🔌 Attempting to connect to Socket.IO");
@@ -171,6 +177,33 @@ function Home() {
     },
   ];
 
+  function handleClickUser(user) {
+    user2.current = user;
+    fetch("http://127.0.0.1:5000/api/message/get", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        username1: userCurrent.user,
+        username2: user,
+      }),
+    }).then(async (res) => {
+      const data = await res.json();
+      if (res.status === 500) {
+        console.log(data.error);
+      } else if (res.status === 200) {
+        listMessageChat.current = data.data;
+        setonFrameChat(true);
+      }
+    });
+  }
+
+  function handleClickClose() {
+    user2.current = null;
+    setonFrameChat(false);
+  }
+
   return (
     <div className={clsx(styles.wrapper)}>
       <header className={clsx(styles.header)}>
@@ -237,7 +270,12 @@ function Home() {
           <div className={clsx(styles.user)}>
             {listUser.map((user, index) => {
               return (
-                <User key={index} avatar username={user}>
+                <User
+                  key={index}
+                  avatar
+                  username={user}
+                  onClick={() => handleClickUser(user)}
+                >
                   {user}
                 </User>
               );
@@ -252,16 +290,47 @@ function Home() {
                 <header className={clsx(styles.headerFrameChat)}>
                   <img
                     src={`http://127.0.0.1:5000/api/avatar/get/q=${encodeURIComponent(
-                      "cong1234"
+                      user2.current
                     )}`}
                     className={clsx(styles.avatarFrameChat)}
                     alt="avatar"
                   />
-                  <h1 className={clsx(styles.UserName2)}>ltc11111</h1>
+                  <h1 className={clsx(styles.UserName2)}>{user2.current}</h1>
                   <h1 className={clsx(styles.optionHeaderFrameChat)}>...</h1>
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    className={clsx(styles.close)}
+                    onClick={handleClickClose}
+                  />
                 </header>
 
-                <div className={clsx(styles.bodyFrameChat)}>nội dung chat</div>
+                <div className={clsx(styles.bodyFrameChat)}>
+                  {listMessageChat.current.map((value, index) => {
+                    if (value.user === userCurrent.user)
+                      return (
+                        <Message user2 key={index}>
+                          {value.mess}
+                        </Message>
+                      );
+                    return (
+                      <Message key={index} avatar={value.user}>
+                        {value.mess}
+                      </Message>
+                    );
+                  })}
+                  <Message avatar="ltc11111" user1>
+                    Lê Thành
+                    Côngaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                  </Message>
+                  <Message avatar="ltc11111" user1>
+                    Lê Thành
+                    Côngaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                  </Message>
+                  <Message user2>
+                    Lê Thành
+                    Côngaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                  </Message>
+                </div>
 
                 <div className={clsx(styles.frameInputChat)}>
                   <FontAwesomeIcon
@@ -276,9 +345,14 @@ function Home() {
                       className={clsx(styles.contentChat)}
                       placeholder="content"
                     />
+
                     <FontAwesomeIcon
                       icon={faPaperPlane}
                       className={clsx(styles.iconSend)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
                     />
                   </div>
                 </div>

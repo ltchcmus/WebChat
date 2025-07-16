@@ -1,4 +1,4 @@
-from library.extensions import socketio, lock, userConnects, fIdToUserName
+from library.extensions import socketio, lock, userConnects, fIdToUserName, fUserNameToId
 from flask_socketio import emit, disconnect
 from flask import request, jsonify  # ✅ thêm import jsonify
 
@@ -19,6 +19,7 @@ def handle_connect(auth):
                 
             userConnects.add(token)
             fIdToUserName[request.sid] = token
+            fUserNameToId[token] = request.sid
             print(f"✅ User {token} connected with session ID: {request.sid}")
             print(f"👥 Total connected users: {len(userConnects)}")
             
@@ -41,6 +42,7 @@ def handle_disconnect(reason):
             if request.sid in fIdToUserName:
                 token = fIdToUserName[request.sid]
                 del fIdToUserName[request.sid]
+                del fUserNameToId[token]
                 userConnects.discard(token)
                 print(f"✅ User {token} disconnected")
                 print(f"👥 Total connected users: {len(userConnects)}")
@@ -50,3 +52,20 @@ def handle_disconnect(reason):
 @socketio.on_error_default
 def default_error_handler(e):
     print(f"❌ SocketIO error: {e}")
+
+
+@socketio.on('private_Message')
+def handle_private_message(data):
+    sender = data.sender
+    receive = data.receive
+    mess = data.mess
+
+    id_receive = fUserNameToId[receive]
+
+    if id_receive:
+        emit('send_message', {
+            'from' : sender,
+            'message' : mess
+        }, room = id_receive)
+
+    

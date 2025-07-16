@@ -10,9 +10,10 @@ def welcome():
 if __name__ == '__main__':
     import eventlet
     import eventlet.wsgi
+    
     init()
     socketio.run(app, 
                 host='127.0.0.1', 
                 port=5000, 
                 debug=True,
-                allow_unsafe_werkzeug=True)
+                allow_unsafe_werkzeug=True) 

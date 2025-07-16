@@ -16,8 +16,8 @@ class Users(db.Model):
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    sender_id = db.Column(db.String(80), db.ForeignKey('users.username'), nullable=False)
+    receiver_id = db.Column(db.String(80), db.ForeignKey('users.username'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     #is_read = db.Column(db.Boolean, default=False)
@@ -25,4 +25,6 @@ class Message(db.Model):
         self.sender_id = sender_id
         self.receiver_id = receiver_id
         self.content = content
+
+    
     
