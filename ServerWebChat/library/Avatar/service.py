@@ -11,7 +11,7 @@ def service_update_avatar(request):
     if 'username' not in request.form:
         return {'error': 'Trường username không tồn tại'}, 400
 
-    file = request.files['avatar']
+    file = request.files['avatar'] #object ảnh
     username = request.form['username']
 
     try:

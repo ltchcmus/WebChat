@@ -16,6 +16,7 @@ function Confirm() {
   const navigate = useNavigate();
   const code = useRef(null);
   const { userCurrent, setUserCurrent } = useUser();
+  if (!userCurrent.user) navigate("/");
   const { listUser, setListUser } = useListUser();
 
   function handleClickSendAgain() {

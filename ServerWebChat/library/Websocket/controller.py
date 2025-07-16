@@ -56,16 +56,15 @@ def default_error_handler(e):
 
 @socketio.on('private_Message')
 def handle_private_message(data):
-    sender = data.sender
-    receive = data.receive
-    mess = data.mess
-
+    sender = data['sender']
+    receive = data['receive']
+    mess = data['mess']
     id_receive = fUserNameToId[receive]
 
     if id_receive:
-        emit('send_message', {
-            'from' : sender,
-            'message' : mess
+        emit('receive_message', {
+            'user' : sender,
+            'data' : mess
         }, room = id_receive)
 
     

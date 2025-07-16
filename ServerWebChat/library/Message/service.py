@@ -34,7 +34,7 @@ def service_get_message(data):
         messagesUser1 = Message.query.filter(Message.sender_id == user1, Message.receiver_id == user2).all()
         messagesUser2 = Message.query.filter(Message.sender_id == user2, Message.receiver_id == user1).all()
         messages = messagesUser1 + messagesUser2
-        messages.sort()
+        messages.sort(key = lambda msg : msg.timestamp)
         list_mess = []
         for msg in messages:
             list_mess.append({'user' : msg.sender_id, 'data' : msg.content})

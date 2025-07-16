@@ -183,6 +183,13 @@
   width: 100%;
   padding: 5px;
   overflow: auto;
+
+  //đóng scrollbar
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .frameInputChat {
